@@ -7,7 +7,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Admin - Change Password</title>
+   <title>Student - Forgot Password</title>
    <meta name="author" content="Ayman">
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lilita+One&family=Nosifer&family=Playpen+Sans:wght@300&family=Poppins:wght@400;600&family=Roboto+Slab&family=Signika:wght@300;500&display=swap" rel="stylesheet">
    <link rel="icon" type="images/x-icon" href="images/maarifs-logo.png">
@@ -33,8 +33,9 @@
          justify-content: center;
          align-items: center;
          min-height: 100vh;
-         background: url('images/admin.jpg') no-repeat center;
+         background: url('images/maarif.webp') no-repeat center;
          background-size: cover;
+         backdrop-filter: blur(10px);
          transition: 300ms all 0s ease-in-out;
       }
 
@@ -67,7 +68,7 @@
          color: #fff;
          position: fixed;
          text-align: center;
-         bottom: 28.7%;
+         bottom: 30.3%;
          font-size: 14px;
          background-color: #cc7c6c;
          border: none;
@@ -152,7 +153,7 @@
          <h1>Change Password</h1>
 
          <div class="login-details">
-            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
          </div>
 
          <div class="login-details">
@@ -168,10 +169,14 @@
          <input type="submit" name="change" class="btn" value="Change Password">
 
          <div class="login">
-            <p>Go back to login? <a href="admin.php">Login</a></p>
+            <p>Go back to login? <a href="index.php">Login</a></p>
             <span id="msg">
                <p></p>
             </span>
+         </div>
+
+         <div class="forgot-email">
+            <p><a href="forgot-email.php">Forgot email?</a></p>
          </div>
 
       </form>
@@ -212,24 +217,24 @@
 
       $change = $_POST['newpass'];
       $confirm = $_POST['confirmpass'];
-      $username = $_POST['username'];
-      $user = "SELECT * FROM admins WHERE username = '$username'";
+      $email = $_POST['email'];
+      $user = "SELECT * FROM studentsdetail WHERE email = '$email'";
       $res = mysqli_query($conn, $user);
 
       if (mysqli_num_rows($res) == 1) {
          $row = mysqli_fetch_assoc($res);
 
-         if ($change == $confirm && $username == $row['username']) {
+         if ($change == $confirm && $email == $row['email']) {
 
-            $query = "UPDATE admins SET pass='$confirm' WHERE username='$username'";
+            $query = "UPDATE studentsdetail SET pass='$confirm' WHERE email='$email'";
             mysqli_query($conn, $query);
    
             echo "<p class='echstyle'>Password successfully updated!</p>";
    
-         } else if ($change != $confirm && $username == $row['username']) {
+         } else if ($change != $confirm && $email == $row['email']) {
             echo "<p class='echstyle'>The passwords don't match!</p>";
          } else {
-            echo "<script> alert('Invalid credentials!'); </script>";
+            echo "<script>alert('Invalid credentials!');</script>";
          }
 
       mysqli_close($conn);

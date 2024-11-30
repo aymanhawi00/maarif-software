@@ -1,6 +1,6 @@
 <?php
-ob_start();
 session_start();
+ob_start();
 ?>
 <?php
 include("database.php");
@@ -11,7 +11,7 @@ include("database.php");
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Student - Login</title>
+   <title>Admin - Login</title>
    <meta name="author" content="Ayman">
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lilita+One&family=Nosifer&family=Playpen+Sans:wght@300&family=Poppins:wght@400;600&family=Roboto+Slab&family=Signika:wght@300;500&display=swap" rel="stylesheet">
    <link rel="icon" type="images/x-icon" href="images/maarifs-logo.png">
@@ -23,6 +23,14 @@ include("database.php");
          font-family: 'Poppins', sans-serif;
       }
 
+      .wrapper .btn:hover {
+            background-color: #adb5bd;
+         }
+
+         body{
+            transition: 300ms all 0s ease-in-out;
+         }
+
       .login-details #pass-icon
       {
          position: absolute;
@@ -33,13 +41,26 @@ include("database.php");
          cursor: pointer;
       }
 
+      .btn {
+            transition: 300ms background 0s ease-in-out;
+         }
+
       body {
          display: flex;
          justify-content: center;
          align-items: center;
          min-height: 100vh;
-         background: url('images/istanbul0.jpg') no-repeat center;
-         background-size: cover;         
+         background: url('images/bridge3.jpg') no-repeat center;
+         background-size: cover;
+      }
+
+      .container {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         min-height: 100vh;
+         background: url('images/admin.jpg') no-repeat center;
+         background-size: cover;
       }
 
       .wrapper {
@@ -47,7 +68,7 @@ include("database.php");
          width: 420px;
          color: #fff;
          border-radius: 10px;
-         padding: 30px 40px 20px 40px;
+         padding: 30px 40px 70px 40px;
          box-shadow: 0 0 10px rgba(0, 0, 0, .2);
          border: 2px solid rgba(255, 255, 255, .2);
          backdrop-filter: blur(50px);
@@ -111,7 +132,6 @@ include("database.php");
          cursor: pointer;
          box-shadow: 0 0 10px rgba(0, 0, 0, .1);
          font-weight: bold;
-         margin-bottom: 65px;
       }
 
       .remember {
@@ -121,24 +141,18 @@ include("database.php");
          justify-content: space-between;
       }
 
-      .wrapper .btn:hover {
-            background-color: #adb5bd;
-         }
-
-         .btn {
-            transition: 300ms background 0s ease-in-out;
-         }
-
-         body{
-            transition: 300ms all 0s ease-in-out;
-         }
+      .register {
+         text-align: center;
+         font-size: 14.5px;
+         margin: 50px 0 15px;
+      }
 
       .echstyle {
          font-weight: bold;
          color: #fff;
          position: fixed;
          text-align: center;
-         bottom: 32.7%;
+         bottom: 30%;
          font-size: 14px;
          background-color: #cc7c6c;
          border: none;
@@ -154,11 +168,11 @@ include("database.php");
 <body>
    <div class="wrapper">
 
-      <form action="index.php" method="post">
-         <h1>Login Student</h1>
+      <form action="admin.php" method="post">
+         <h1>Login Admin</h1>
 
          <div class="login-details">
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="username" placeholder="Username" required>
          </div>
 
          <div class="login-details">
@@ -167,11 +181,10 @@ include("database.php");
          </div>
 
          <div class="remember">
-            <a href="admin.php">Admin's site?</a> <a href="change-password.php" target="_blank">Forgot Password?</a>
+            <a href="index.php">User's site?</a> <a href="change-password-admin.php" name="change" target="_blank">Forgot Password?</a>
          </div>
 
          <input type="submit" name="login" class="btn" value="Login">
-
 
       </form>
 
@@ -195,19 +208,19 @@ include("database.php");
 <?php
 if (isset($_POST['login'])) {
 
-   $email = $_POST["email"];
+   $username = $_POST["username"];
    $password = $_POST["password"];
 
-   $sqlpass = "SELECT * FROM studentsdetail WHERE email = '$email' && pass = '$password'";
+   $sqlpass = "SELECT * FROM admins WHERE username = '$username' && pass = '$password'";
 
    $res = mysqli_query($conn, $sqlpass);
 
-   if (mysqli_num_rows($res) == 1) {
+   if (mysqli_num_rows($res) === 1) {
       $row = mysqli_fetch_assoc($res);
-      if ($row['email'] == $email && $row['pass'] == $password) {
-         $_SESSION['email'] = $row['email'];
-         $_SESSION['password'] = $row['pass'];
-         header("Location: home.php");
+      if ($row['username'] == $username && $row['pass'] == $password) {
+         $_SESSION["username"] = $row['username'];
+         $_SESSION["password"] = $row['pass'];
+         header("Location: admin-home.php.php");
          ob_end_flush();
       }
    } else {

@@ -1,0 +1,25 @@
+DON'T FORGET TO DROP THE STUDENTS TABLE AND CREATE IT AGAIN!
+
+fix images, back-end of update.php and dash.php
+
+upload file with preview
+
+dash.php
+
+are you sure delete pop-up 
+
+dropdowns background fix
+
+what if students forgot pass
+
+fix confirm not working
+
+Talk about line 228 on changepass.php of both sites
+
+let them reload when every change is done
+
+remove css caches repeated
+
+fix vh of all bodies
+
+and finally link the update to the dashboard and both pass settings with settings

@@ -12,7 +12,7 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Admin - Section Registration</title>
+   <title>Admin - Register Club</title>
    <link rel="icon" type="images/x-icon" href="images/maarifs-logo.png">
    <script src="https://kit.fontawesome.com/450cf52145.js" crossorigin="anonymous"></script>
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
@@ -27,45 +27,12 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
          font-family: "Poppins", sans-serif;
          }
 
-         body{
-            transition: 300ms all 0s ease-in-out;
-         }
-
-         .wrapper .input-box .input-field select {
-         width: 100%;
-         height: 100%;
-         position: relative;
-         background: transparent;
-         border: 2px solid rgba(255, 255, 255, .2);
-         outline: none;
-         font-size: 16px;
-         cursor: pointer;
-         color: #fff;
-         border-radius: 7px;
-         padding: 0 15px;
-         }
-
-         .wrapper .input-box .input-field select option {
-            color: black;
-            background: transparent;
-         }
-
-         #remcon {
-            background-color: #adb5bd !important;
-            cursor: default !important;
+         select:after {
+            content: "";
          }
 
          #float {
             display: none;
-         }
-
-         #register2 {
-            background-color: transparent !important;
-            cursor: pointer;
-         }
-
-         #register2:hover {
-            background-color: #0d6efd !important;
          }
 
          i {
@@ -74,8 +41,8 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
             top: 50%;
             transform: translateY(-50%);
             font-size: 24px;
-            cursor: pointer;
             color: #5ab5c7;
+            cursor: pointer;
             transition: 300ms color 0s;
          }
 
@@ -97,21 +64,16 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
          background-position: center;
          }
 
-
-         .btn {
-            transition: 300ms background 0s ease-in-out;
-         }
          .wrapper {
          width: 500px;
          background: rgba(255, 255, 255, .1);
          border: 2px solid rgba(255, 255, 255, .2);
          box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+         backdrop-filter: blur(50px);
          border-radius: 0 0 10px 10px;
          color: #fff;
-         backdrop-filter: blur(50px);
          padding: 75px 35px;
          margin: 0 10px;
-         transition: 300ms all 0s ease-in-out;
          position: relative;
          }
 
@@ -176,13 +138,6 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
 
          #logout {
             position: absolute !important;
-            padding-top: 0 !important;
-            padding-right: 0 !important;
-            padding-left: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            margin-left: 0 !important;
-            margin-bottom: 0 !important;
             right: 50px !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
@@ -206,15 +161,19 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
             justify-content: center;
             align-items: center;
             font-size: 25px;
+            transition: 300ms background 0s;
             font-weight: 400;
-            background-color: transparent;
+            background-color: #adb5bd;
             border-top: 2px solid rgba(255, 255, 255, .2);
             border-right: 2px solid rgba(255, 255, 255, .2);
             border-left: 2px solid rgba(255, 255, 255, .2);
             outline: none;
             border-radius: 10px 10px 0 0;
-            background-color: #adb5bd;
             box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+         }
+
+         ::selection{
+            background-color: #adb5bd;
          }
 
          .remcon {
@@ -222,17 +181,15 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
             top: -3rem;
             height: 3rem;
             right: -0.5%;
-            transition: 300ms background 0s;
             width: 15rem;
             backdrop-filter: blur(50px);
             color: #fff;
             display: flex;
             justify-content: center;
-            cursor: pointer;
             align-items: center;
             font-size: 25px;
+            cursor: pointer;
             font-weight: 400;
-            background-color: transparent;
             border-top: 2px solid rgba(255, 255, 255, .2);
             border-right: 2px solid rgba(255, 255, 255, .2);
             border-left: 2px solid rgba(255, 255, 255, .2);
@@ -242,27 +199,57 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
             box-shadow: 0 0 10px rgba(0, 0, 0, .2);
          }
 
-         ::selection{
-         background-color: #adb5bd;
-      }
+         .wrapper .input-box .input-field select {
+         width: 100%;
+         height: 100%;
+         position: relative;
+         background: transparent;
+         border: 2px solid rgba(255, 255, 255, .2);
+         outline: none;
+         font-size: 16px;
+         cursor: pointer;
+         position: relative;
+         color: #fff;
+         border-radius: 7px;
+         padding: 0 15px;
+         }
+
+         .wrapper .input-box .input-field select option {
+            color: black;
+            background: transparent;
+         }
 
          .remcon:hover {
             background-color: #0d6efd;
          }
 
-         .dropdown-item {
-            transition: 300ms background 0s;
+         #remcon {
+            background-color: #adb5bd !important;
+            cursor: default !important;
          }
 
-         .nav-link {
-            transition: 300ms color 0s;
+         #register2 {
+            background-color: transparent !important;
+            cursor: pointer;
          }
 
-         .wrapper > a {
+         #register2:hover {
+            background-color: #0d6efd !important;
+         }
+         
+         .btn {
+            transition: 300ms background 0s ease-in-out;
+         }
+
+         body{
+            transition: 300ms all 0s ease-in-out;
+         }
+
+         .regcon a {
             text-decoration: none;
             color: #fff;
          }
-         
+
          @media (max-width: 576px) {
          .input-box .input-field {
             width: 100%;
@@ -274,8 +261,8 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
 
 <body>
 
-   <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
-      <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
+       <div class="container-fluid">
          <a class="navbar-brand" href="clubreg.php"><img src="images/navlogo.png" width="250px"></a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -292,8 +279,8 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
                School Registration
                </a>
                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="clubreg.php">Club Registration</a></li>
-                  <li><a class="dropdown-item active" href="sectionreg.php">Section Registration</a></li>
+                  <li><a class="dropdown-item active" href="clubreg.php">Club Registration</a></li>
+                  <li><a class="dropdown-item" href="sectionreg.php">Section Registration</a></li>
                </ul>
             </li>
 
@@ -306,58 +293,58 @@ if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
                   <li><a class="dropdown-item" href="update.php">Update Student</a></li>
                </ul>
             </li>
+            
             <li class="nav-item" id="logout">
                <i class="fa-solid fa-gear"></i>
                <a class="nav-link" href="logout-admin.php">Logout</a>
             </li>
             </ul>
          </div>
-         </div>
+          </div>
       </nav>
 
    <div class="form-container">
 
       <div class="wrapper">
 
-         <a href="sectionreg.php"><div class="regcon" id="register2">Register</div></a>
+         <a href="clubreg.php"><div id="register2" class="regcon">Register</div></a>
 
          <div class="remcon" id="remcon">Remove</div>
 
-         <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
+            <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
 
-               <h1>Remove Section</h1>
+                  <h1>Remove Club</h1>
 
-               <div class="input-box">
-                  <div class="input-field">
-                     <select id="secsel" name="secsel" required>
-                        <option value="" selected disabled>Select Section</option>
-                        <?php
-                           include('database.php');
-                           $mysection = mysqli_query($conn, "select * from sections");
-                           while($c = mysqli_fetch_array($mysection)) {
-                        ?>
-                        <option><?php echo $c['section']; ?></option>
-                        <?php } ?>
-                     </select>
+                  <div class="input-box">
+                     <div class="input-field">
+                        <select id="clubname" name="clubname">
+                           <option value="" selected disabled>Select Club</option>
+                              <?php
+                                 include('database.php');
+                                 $myclubs = mysqli_query($conn, "select * from club");
+                                 while($c = mysqli_fetch_array($myclubs)) {
+                              ?>
+                              <option><?php echo $c['clubs']; ?></option>
+                              <?php } ?>
+                        </select>
+                     </div>
                   </div>
-               </div>
 
-               <div class="regcontain">
-                  <button type="submit" for="secsel" name="deletesection" id="deletesection" class="btn">Remove</button>
-               </div>
+                  <div class="regcontain">
+                  <button type="submit" name="delete" class="btn">Remove</button>
+                  </div>
 
-         </form>
+            </form>
       </div>
 
     </div>
-
 </body>
 </html>
 <?php
-   if(isset($_POST['deletesection'])) {
-      $sectionremove = $_POST['secsel'];
+   if(isset($_POST['delete'])) {
+      $clubremove = $_POST['clubname'];
 
-      $remove = "DELETE FROM sections WHERE section = '$sectionremove'";
+      $remove = "DELETE FROM club WHERE clubs = '$clubremove'";
 
       mysqli_query($conn, $remove);
    }

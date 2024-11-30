@@ -1,9 +1,8 @@
 <?php
-include("database.php");
-ob_start();
 session_start();
-if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
-   echo "<script>window.top.location='index.php'</script>";
+include("database.php");
+if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
+   header('Location: admin.php');
 }
 ?>
 
@@ -11,7 +10,7 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+   <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Admin - Register Club</title>
    <link rel="icon" type="images/x-icon" href="images/maarifs-logo.png">
@@ -32,28 +31,14 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
             transition: 300ms all 0s ease-in-out;
          }
 
-         #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0,0,0,.8) url(images/Coffee@1x-1.0s-200px-200px\ \(4\).gif) no-repeat center center;
-            background-size: 7%;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-         }
-
          .remcon a {
             text-decoration: none;
             color: #fff;
          }
 
-         #set {
+         i {
             position: inherit;
-            left: -2rem;
+            left: -1.7rem;
             top: 50%;
             transform: translateY(-50%);
             font-size: 24px;
@@ -66,13 +51,6 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
             color: #A9A9A9;
          }
 
-         nav {
-         position: fixed !important;
-         top: 0 !important;
-         width: 100% !important;
-         z-index: 2;
-         }
-
          .dropdown-item:hover {
             background-color: #adb5bd;
          }
@@ -81,7 +59,7 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          display: flex;
          justify-content: center;
          align-items: center;
-         min-height: 100vh;
+         min-height: 91.5vh;
          background: url('images/bridge3.jpg') no-repeat;
          background-size: cover;
          background-position: center;
@@ -95,7 +73,7 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          backdrop-filter: blur(50px);
          border-radius: 0 0 10px 10px;
          color: #fff;
-         padding: 30px 35px;
+         padding: 75px 35px;
          margin: 0 10px;
          position: relative;
          }
@@ -223,18 +201,18 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          }
 
          .wrapper .input-box .input-field select {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background: transparent;
-            border: 2px solid rgba(255, 255, 255, .2);
-            outline: none;
-            font-size: 16px;
-            cursor: pointer;
-            position: relative;
-            color: #fff;
-            border-radius: 7px;
-            padding: 0 15px;
+         width: 100%;
+         height: 100%;
+         position: relative;
+         background: transparent;
+         border: 2px solid rgba(255, 255, 255, .2);
+         outline: none;
+         font-size: 16px;
+         cursor: pointer;
+         position: relative;
+         color: #fff;
+         border-radius: 7px;
+         padding: 0 15px;
          }
 
          .wrapper .input-box .input-field select option {
@@ -274,10 +252,10 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
 </head>
 
 <body>
-<div id="preloader"></div>
-<nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
+
+      <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
        <div class="container-fluid">
-         <a class="navbar-brand" href="admin-home.php"><img src="images/navlogo.png" width="250px"></a>
+         <a class="navbar-brand" href="clubreg.php"><img src="images/navlogo.png" width="250px"></a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
          </button>
@@ -287,16 +265,6 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
             <li class="nav-item">
                <a class="nav-link" href="dash.php">Dashboard</a>
             </li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                 Activities
-              </a>
-              <ul class="dropdown-menu">
-                 <li><a class="dropdown-item" href="activity.php">Club Activity</a></li>
-                 <li><a class="dropdown-item" href="trackattendance.php">Track Attendance</a></li>
-              </ul>
-           </li>
 
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -314,12 +282,13 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
                </a>
                <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="admin-home.php">Add Student</a></li>
+                  <li><a class="dropdown-item" href="update.php">Update Student</a></li>
                </ul>
             </li>
             
             <li class="nav-item" id="logout">
-            <a href="settings.php" target="_blank" id="set"><i class="fa-solid fa-gear"></i></a>
-               <a class="link" onclick="con()" href="logout-admin.php">Logout</a>
+               <i class="fa-solid fa-gear"></i>
+               <a class="nav-link" href="logout-admin.php">Logout</a>
             </li>
             </ul>
          </div>
@@ -348,34 +317,18 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
                <button type="submit" name="clubreg" class="btn">Register</button>
                </div>
 
-               <?php
-               if (isset($_GET['success'])) 
-                     {
-                     echo "<div class='alert alert-success text-center mt-3 mb-0'>Club successfully registered!</div>";
-                     }
-               ?>
-
          </form>
       </div>
 
    </div>
-   <script>
-      var loader = document.getElementById("preloader");
-      window.addEventListener("load", function(){
-         loader.style.display = "none";
-      });
-   </script>
 </body>
 </html>
 <?php
    if(isset($_POST['clubreg'])) {
       $newclub = $_POST['clubregister'];
 
-      $query = "INSERT INTO club (clubs) VALUES ('$newclub');";
+      $query = "INSERT INTO club VALUES ('$newclub');";
 
       mysqli_query($conn, $query);
-      if (mysqli_query($conn, $query)){
-      echo "<script>window.top.location='clubreg.php?success'</script>";
-      }
    }
 ?>

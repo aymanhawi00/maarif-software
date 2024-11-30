@@ -1,9 +1,8 @@
 <?php
-include("database.php");
-ob_start();
 session_start();
-if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
-   echo "<script>window.top.location='index.php'</script>";
+include("database.php");
+if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
+   header('Location: admin.php');
 }
 ?>
 
@@ -18,7 +17,6 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
    <script src="https://kit.fontawesome.com/450cf52145.js" crossorigin="anonymous"></script>
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
    <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
@@ -27,27 +25,6 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          padding: 0;
          box-sizing: border-box;
          font-family: "Poppins", sans-serif;
-         }
-
-         #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0,0,0,.8) url(images/Coffee@1x-1.0s-200px-200px\ \(4\).gif) no-repeat center center;
-            background-size: 7%;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-         }
-
-         nav {
-         position: fixed !important;
-         top: 0 !important;
-         width: 100% !important;
-         z-index: 2;
          }
 
          .wrapper a {
@@ -92,9 +69,9 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
             background-color: #0d6efd !important;
          }
 
-         #set {
+         i {
             position: inherit;
-            left: -2rem;
+            left: -1.7rem;
             top: 50%;
             transform: translateY(-50%);
             font-size: 24px;
@@ -115,7 +92,7 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          display: flex;
          justify-content: center;
          align-items: center;
-         min-height: 100vh;
+         min-height: 91.5vh;
          background: url('images/bridge3.jpg') no-repeat;
          background-size: cover;
          background-position: center;
@@ -137,7 +114,7 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
          border-radius: 0 0 10px 10px;
          color: #fff;
          backdrop-filter: blur(50px);
-         padding: 35px 35px;
+         padding: 75px 35px;
          margin: 0 10px;
          position: relative;
          transition: 300ms all 0s ease-in-out;
@@ -296,10 +273,10 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
 </head>
 
 <body>
-<div id="preloader"></div>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
-       <div class="container-fluid">
-         <a class="navbar-brand" href="admin-home.php"><img src="images/navlogo.png" width="250px"></a>
+
+   <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
+      <div class="container-fluid">
+         <a class="navbar-brand" href="clubreg.php"><img src="images/navlogo.png" width="250px"></a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
          </button>
@@ -308,16 +285,6 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
 
             <li class="nav-item">
                <a class="nav-link" href="dash.php">Dashboard</a>
-            </li>
-
-            <li class='nav-item dropdown'>
-               <a class='nav-link dropdown-toggle' href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                     Activities
-               </a>
-               <ul class='dropdown-menu'>
-                     <li><a class='dropdown-item' href='activity.php'>Club Activity</a></li>
-                     <li><a class='dropdown-item' href='trackattendance.php'>Track Attendance</a></li>
-               </ul>
             </li>
 
             <li class="nav-item dropdown">
@@ -336,16 +303,16 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
                </a>
                <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="admin-home.php">Add Student</a></li>
+                  <li><a class="dropdown-item" href="update.php">Update Student</a></li>
                </ul>
             </li>
-            
             <li class="nav-item" id="logout">
-               <a href="settings.php" target="_blank" id="set"><i class="fa-solid fa-gear"></i></a>
-               <a class="link" onclick="con()" href="logout-admin.php">Logout</a>
+               <i class="fa-solid fa-gear"></i>
+               <a class="nav-link" href="logout-admin.php">Logout</a>
             </li>
             </ul>
          </div>
-          </div>
+         </div>
       </nav>
 
    <div class="form-container">
@@ -370,33 +337,19 @@ if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
                   <button type="submit" name="sectionreg" id="sectionreg" class="btn">Register</button>
                </div>
 
-               <?php
-               include("database.php");
-                     if (isset($_GET['success'])) 
-                     {
-                     echo "<div class='alert alert-success text-center mt-3 mb-0'>Section successfully registered!</div>";
-                     }
-               ?>
-
          </form>
       </div>
 
     </div>
-   <script>
-      var loader = document.getElementById("preloader");
-      window.addEventListener("load", function(){
-         loader.style.display = "none";
-      });
-   </script>
+
 </body>
 </html>
 <?php
    if(isset($_POST['sectionreg'])) {
       $newsection = $_POST['sectionoption'];
 
-      $query = "INSERT INTO sections (section) VALUES ('$newsection')";
+      $query = "INSERT INTO sections VALUES ('$newsection')";
 
       mysqli_query($conn, $query);
-      echo "<script>window.top.location='sectionreg.php?success'</script>";
    }
 ?>

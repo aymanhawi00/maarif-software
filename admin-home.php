@@ -1,14 +1,9 @@
 <?php
-ob_start();
 session_start();
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-if (!isset($_SESSION["superid"]) && !isset($_SESSION['admin'])) {
-   echo "<script>window.top.location='index.php'</script>";
+include("database.php");
+if (!isset($_SESSION['email']) && !isset($_SESSION['password'])) {
+   header('Location: admin.php');
 }
-include("database.php"); 
-
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +13,6 @@ include("database.php");
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Admin - Add Student</title>
-   <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
    <script src="https://kit.fontawesome.com/450cf52145.js" crossorigin="anonymous"></script>
    <link rel="icon" type="images/x-icon" href="images/maarifs-logo.png">
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
@@ -28,24 +22,10 @@ include("database.php");
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-         }
-
-         #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0,0,0,.8) url(images/Coffee@1x-1.0s-200px-200px\ \(4\).gif) no-repeat center center;
-            background-size: 7%;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: "Poppins", sans-serif;
          }
 
          .wrapper #picture {
@@ -63,6 +43,10 @@ include("database.php");
             background-color: #adb5bd;
          }
 
+         #studentpic {
+            display: none;
+         }
+
          body{
             transition: 300ms all 0s ease-in-out;
          }
@@ -77,6 +61,10 @@ include("database.php");
 
          .btn {
             transition: 300ms background 0s ease-in-out;
+         }
+
+         #date {
+            cursor: pointer;
          }
 
          .regcontain {
@@ -107,92 +95,115 @@ include("database.php");
             box-shadow: 0 0 10px rgba(0, 0, 0, .2);
          }
    
-         .dropdown-item {
+
+      .dropdown-item {
+         transition: 300ms background 0s;
+      }
+
+      .nav-link {
+         transition: 300ms color 0s;
+      }
+      
+      ::selection{
+         background-color: #adb5bd;
+      }
+
+         .remcon {
+            position: absolute;
+            top: -3rem;
+            height: 3rem;
             transition: 300ms background 0s;
-         }
-
-         .nav-link {
-            transition: 300ms color 0s;
-         }
-
-         #prev-img {
-            height: 200px;
-            width: 200px;
+            right: -0.5%;
+            width: 15rem;
+            backdrop-filter: blur(50px);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            font-weight: 400;
+            background-color: transparent;
+            border-top: 2px solid rgba(255, 255, 255, .2);
+            border-right: 2px solid rgba(255, 255, 255, .2);
+            border-left: 2px solid rgba(255, 255, 255, .2);
             outline: none;
-            border: none;
-            overflow: hidden;
-            background: url(images/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png);
-            background-position: center;
+            border-radius: 10px 10px 0 0;
+            background-color: transparent;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+         }
+
+         .wrapper2 a .remcon:hover {
+            background-color: #0d6efd;
+         }
+
+         #club-container{
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('images/bridge3.jpg') no-repeat;
             background-size: cover;
-            background-repeat: no-repeat;
-            z-index: -1;
+            background-position: center;
          }
-         
-         ::selection{
+
+         #section-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('images/bridge3.jpg') no-repeat;
+            background-size: cover;
+            background-position: center;
+         }
+
+         .echstyle {
+         font-weight: bold;
+         color: #fff;
+         position: fixed;
+         text-align: center;
+         bottom: 24.1%;
+         font-size: 14px;
+         background-color: #cc7c6c;
+         border: none;
+         outline: none;
+         border-radius: 13px;
+         padding: 3px 7px;
+         box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+      }
+
+         .dropdown-item:hover {
             background-color: #adb5bd;
          }
 
-            .remcon {
-               position: absolute;
-               top: -3rem;
-               height: 3rem;
-               transition: 300ms background 0s;
-               right: -0.5%;
-               width: 15rem;
-               backdrop-filter: blur(50px);
-               color: #fff;
-               display: flex;
-               justify-content: center;
-               align-items: center;
-               font-size: 25px;
-               font-weight: 400;
-               background-color: transparent;
-               border-top: 2px solid rgba(255, 255, 255, .2);
-               border-right: 2px solid rgba(255, 255, 255, .2);
-               border-left: 2px solid rgba(255, 255, 255, .2);
-               outline: none;
-               border-radius: 10px 10px 0 0;
-               background-color: transparent;
-               box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-            }
-
-            .wrapper2 a .remcon:hover {
-               background-color: #0d6efd;
-            }
-
-            .dropdown-item:hover {
-               background-color: #adb5bd;
-            }
-
-            #set {
-               position: inherit;
-               left: -2rem;
-               top: 50%;
-               transform: translateY(-50%);
-               font-size: 24px;
-               color: #5ab5c7;
-               cursor: pointer;
-               transition: 300ms color 0s;
-            }
-
-         .dropdown-item {
-            transition: 300ms background 0s;
-         }
-
-         ::selection{
-            background-color: #adb5bd;
-         }
-
-         .nav-link {
+         i {
+            position: inherit;
+            left: -1.7rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #5ab5c7;
+            cursor: pointer;
             transition: 300ms color 0s;
          }
 
-         nav {
-            position: fixed !important;
-            top: 0 !important;
-            width: 100% !important;
-            z-index: 2;
-         }
+      .dropdown-item {
+         transition: 300ms background 0s;
+      }
+
+      ::selection{
+         background-color: #adb5bd;
+      }
+
+      .nav-link {
+         transition: 300ms color 0s;
+      }
+
+      nav {
+         position: fixed !important;
+         top: 0 !important;
+         width: 100% !important;
+         z-index: 2;
+      }
 
          i:hover {
             color: #A9A9A9;
@@ -217,7 +228,7 @@ include("database.php");
          backdrop-filter: blur(50px);
          border-radius: 10px;
          color: #fff;
-         padding: 25px 35px 45px;
+         padding: 40px 35px 45px;
          margin: 0 10px;
          }
 
@@ -426,7 +437,7 @@ include("database.php");
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 10px 0;
+            margin: 15px 0;
             font-size: 21px;
          }
 
@@ -514,57 +525,46 @@ include("database.php");
 
 <body>
 
-      <div id="preloader"></div>
-
       <nav class="navbar navbar-expand-lg bg-body-tertiary" id="home-nav">
-       <div class="container-fluid">
-         <a class="navbar-brand" href="admin-home.php"><img src="images/navlogo.png" width="250px"></a>
-         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-         </button>
-         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+         <div class="container-fluid">
+            <a class="navbar-brand" href="clubreg.php"><img src="images/navlogo.png" width="250px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+            </button>
+               <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                  <ul class="navbar-nav">
 
-            <li class="nav-item">
-               <a class="nav-link" href="dash.php">Dashboard</a>
-            </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="dash.php">Dashboard</a>
+                  </li>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                 Activities
-              </a>
-              <ul class="dropdown-menu">
-                 <li><a class="dropdown-item" href="activity.php">Club Activity</a></li>
-                 <li><a class="dropdown-item" href="trackattendance.php">Track Attendance</a></li>
-              </ul>
-           </li>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        School Registration
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="clubreg.php">Club Registration</a></li>
+                        <li><a class="dropdown-item" href="sectionreg.php">Section Registration</a></li>
+                     </ul>
+                  </li>
 
-            <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               School Registration
-               </a>
-               <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="clubreg.php">Club Registration</a></li>
-                  <li><a class="dropdown-item" href="sectionreg.php">Section Registration</a></li>
-               </ul>
-            </li>
-
-            <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Student Registration
-               </a>
-               <ul class="dropdown-menu">
-                  <li><a class="dropdown-item active" href="admin-home.php">Add Student</a></li>
-               </ul>
-            </li>
-            
-            <li class="nav-item" id="logout">
-               <a href="settings.php" target="_blank" id="set"><i class="fa-solid fa-gear"></i></a>
-               <a class="link" onclick="con()" href="logout-admin.php">Logout</a>
-            </li>
-            </ul>
-         </div>
-          </div>
+                  <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Student Registration
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="admin-home.php">Add Student</a></li>
+                        <li><a class="dropdown-item" href="update.php">Update Student</a></li>
+                     </ul>
+                  </li>
+                  
+                  <li class="nav-item" id="logout">
+                     <i class="fa-solid fa-gear"></i>
+                     <a class="nav-link" href="logout-admin.php">Logout</a>
+                  </li>
+                  </ul>
+               </div>
+            </div>
       </nav>
 
 
@@ -573,58 +573,44 @@ include("database.php");
 
          <div class="wrapper">
             <form action="admin-home.php" method="post" enctype="multipart/form-data">
-
                   <h1>Registration</h1>
 
-                  <?php  
-                   include("database.php");
-                     if (isset($_GET['EmailRegistered'])) 
-                     {
-                     echo "<div class='alert alert-danger text-center'>Email already registered!</div>";
-                     } else if (isset($_GET['Too_Large'])) {
-                        echo "<div class='alert alert-danger text-center'>Image size too large!</div>";
-                     }  else if (isset($_GET['success'])) {
-                        echo "<div class='alert alert-success text-center'>Successfully registered!</div>";
-                     } else if (isset($_GET['Empty'])) {
-                        echo "<div class='alert alert-danger text-center'>Fill in the blanks!</div>";
-                     }
-                  ?>             
+                  <input type="file" name="studentpic" id="studentpic" accept="jpg, jpeg, png" >
 
-                  <div class="d-flex justify-content-center">
-                     <div class="d-flex justify-content-center rounded-circle mt-3" id="prev-img">
-                        <div id="prev-prev"></div>
-                     </div>
-                  </div>
+                  <?php/*
+                     $res = mysqli_query($conn, "select images from clubreg");
+                     while($row = mysqli_fetch_assoc($res)) {
+                        */
+                  ?>
 
-                  <div class="mt-3">
-                     <label class="btn btn-primary d-flex align-items-center justify-content-center" style="width: 25% !important;" >
-                     Upload Image
-                     <input type="file" name="studentpic" accept=".jpg, .jpeg, .png" id="studentpic" onchange="getimgpreview(event)" style="display: none;" >
-                     </label>
-                  </div>
+                  <?php/*<img id="pic" src="images/<?php/* echo $row['images']*/ ?>
+
+                  <?php // } ?>
+
+                  <label for="studentpic" class="btn" id="picture">Upload Student Picture</label>
 
                   <div class="input-box">
                      <div id="emailfield" class="input-field">
-                        <input type="email" name="email" placeholder="Email" >
+                        <input type="text" name="email" placeholder="Email" required>
                      </div>
                   </div>
 
                   <div class="input-box">
                      <div class="input-field">
-                        <input type="text" name="firstname" placeholder="First Name" >
+                        <input type="text" name="firstname" placeholder="Student First Name" required>
                      </div>
                      <div class="input-field">
-                        <input type="text" name="lastname" placeholder="Last Name" >
+                        <input type="text" name="lastname" placeholder="Student Last Name" required>
                      </div>
                   </div>
 
                   <div class="input-box">
                      <div class="input-field">
-                        <select id="secsel" name="section" >
+                        <select id="secsel" name="section" required>
                            <option value="" selected disabled>Select Section</option>
                            <?php
                               include('database.php');
-                              $mysection = mysqli_query($conn, "select distinct section from sections");
+                              $mysection = mysqli_query($conn, "select * from sections");
                               while($c = mysqli_fetch_array($mysection)) {
                            ?>
                            <option><?php echo $c['section']; ?></option>
@@ -636,7 +622,7 @@ include("database.php");
                            <option value="" selected disabled>Select Club</option>
                               <?php
                                  include('database.php');
-                                 $myclubs = mysqli_query($conn, "select distinct clubs from club");
+                                 $myclubs = mysqli_query($conn, "select * from club");
                                  while($c = mysqli_fetch_array($myclubs)) {
                               ?>
                               <option><?php echo $c['clubs']; ?></option>
@@ -646,74 +632,37 @@ include("database.php");
                   </div>
 
                   <div class="input-box">
-                     <div class="input-field" id="emailfield">
-                        <input type="text" name="dob" placeholder="Date of Birth (DD/MM/YY)" >
+                     <div class="input-field">
+                        <input type="password" name="password" placeholder="Password" required>
+                     </div>
+                     <div class="input-field">
+                        <input type="text" onfocus="(this.type='date')" id="date" name="dob" placeholder="Date of Birth" required>
                      </div>
                   </div>
 
                   <div class="input-radio">
-                     <label id="gender" >Gender: </label>
+                     <label id="gender">Gender: </label>
                      <label class="radio">
-                        <input type="radio" name="gender" value="male" >Male
+                        <input type="radio" name="gender" value="male">Male
                         <span></span>
                      </label>
                      <label class="radio">
-                        <input type="radio" name="gender" value="female" >Female
+                        <input type="radio" name="gender" value="female">Female
                         <span></span>
                      </label>
                   </div>
 
-                  <button type="submit" name="register" class="btn mt-0">Register</button>
+                  <button type="submit" name="register" class="btn">Register</button>
             </form>
          </div>
 
          </div>
          <div class="butn"><button><a href="clubreg.php">Register Clubs Here<i id="down" class="fa-solid fa-link"></i></a></button></div>
       </div>
-   
-      <script>
 
-         function con() {
-            var message = confirm('Are you sure you want to logout?');
-            if (message == false) {
-               event.preventDefault();
-            }
-         }
-         function getimgpreview(event) {
-            var image = URL.createObjectURL(event.target.files[0]);
-            var imagediv = document.getElementById("prev-prev");
-            var img = document.getElementById("preview-img");
-            var newimg = document.createElement('img');
-            imagediv.innerHTML = '';
-            newimg.src = image;
-            newimg.style.objectFit = "cover";
-            newimg.style.width = "100%";
-            imagediv.appendChild(newimg);
-            document.getElementById("prev-img").style.background = "transparent";
-
-         }
-
-         var loader = document.getElementById("preloader");
-
-         window.addEventListener("load", function(){
-            loader.style.display = "none";
-         });
-
-      </script>
 </body>
 </html>
 <?php
-   function generateRandomString() {
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < 16; $i++) {
-         $randomString .= $characters[random_int(0, $charactersLength - 1)];
-      }
-      return $randomString;
-      
-   }
-
    if(isset($_POST['register'])) {
 
       $clubname = $_POST['clubname'];
@@ -722,109 +671,25 @@ include("database.php");
       $email = $_POST['email'];
       $gender = $_POST['gender'];
       $dateofb = $_POST['dob'];
-      $password = generateRandomString();
+      $password = $_POST['password'];
       $section = $_POST['section'];
+      $filename = $_FILES['studentpic'];
 
-      $filename = $_FILES['studentpic']['name'];
-      $file = $_FILES['studentpic'];
-      $type = $_FILES['studentpic']['type'];
-      $temp = $_FILES['studentpic']['tmp_name'];
-      $size = $_FILES['studentpic']['size'];
+      $query = "INSERT INTO studentsdetail (first_name,	last_name, club_names, section_no, gender, date_of_birth, email, pass, img) VALUES ('$firstname', '$lastname', '$clubname', '$section', '$gender', '$dateofb', '$email', '$password', '$filename')";
 
-      $ext = explode('.', $filename);
-      $trueext = strtolower(end($ext));
-      $allowedext = array('jpg', 'jpeg', 'png');
-      $target = "images/".$filename;
+      // $mysql_run = 
+      mysqli_query($conn, $query);
       
-      $queryy = "select * from studentsdetail where email = '$email'";
-      $result = mysqli_query($conn, $queryy);
-         
-         if (mysqli_num_rows($result) > 0) {
-            echo "<script>window.top.location='admin-home.php?EmailRegistered'</script>";
-         }
-         else
-         {
-            if(in_array($trueext, $allowedext) && !empty($_POST['email']) && !empty($_POST['clubname']) && !empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['gender']) && !empty($_POST['dob']) && !empty($_POST['section'])) {
-
-               if ($size < 7000000) {
-
-                  $hash = password_hash($password, PASSWORD_DEFAULT);
-                  date_default_timezone_set('Africa/Addis_Ababa');
-                  $date = date("d/m/Y");
-
-                  $query = mysqli_query($conn, "INSERT INTO studentsdetail (first_name, last_name, club_names, section_no, gender, date_of_birth, email, pass, reg_date, img) VALUES ('$firstname', '$lastname', '$clubname', '$section', '$gender', '$dateofb', '$email', '$hash', '$date', '$filename')");
-
-
-                  move_uploaded_file($temp, $target);
-
-                  $mail = new PHPMailer\PHPMailer\PHPMailer();
-
-                  $mail-> isSMTP();
-                  $mail-> Host = 'smtp.gmail.com';
-                  $mail-> SMTPAuth = true;
-                  $mail-> Username = 'aymexbusy2022@gmail.com';
-                  $mail-> Password = 'rhoohobzrztafafj';
-                  $mail-> SMTPSecure = 'ssl';
-                  $mail-> Port = 465;
-                  $mail-> setFrom('aymexbusy2022@gmail.com');
-                  $mail-> addAddress($email);
-                  $mail-> isHTML(true);
-                  $mail-> Subject = 'Login Password';
-                  $mail-> Body = "
-                  <div style='width: 700px; height:800px; padding: 50px 40px 0; box-sizing: border-box; color: #fff; background: #1b2b3b;  box-shadow: 0 0 0 10px rgba(255,255,255,1); border-radius: 10px; overflow: hidden;'>
-            <div style='font-weight: 450; position:relative; color: #fff !important; box-sizing: border-box; height: 100%; font-size: 17px;'>
-    
-                <div style='display: flex; justify-content: center;'><center><img src='https://i.ibb.co/SKSKJYT/navlogo-removebg-preview.png' style='margin: 0 auto !important;' alt='Maarif Logo' height='50px'></center></div>
-                    <br><br><br>
-                    <span style='color: #fff !important;'>Hello $firstname,</span><br><br>
-                    <span style='color: #fff !important;'>Your login password is as follows, please don't share it with anyone.</span>
-                    <br><br>
-
-                    <div style='position: relative; background-color: #3bb6d9; max-height: 60px !important; padding: 10px 20px; width: 400px; font-size: 25px; margin:auto; text-align:center; border-radius: 7px;' id='passcopy'>$password
-                    <div style='font-size: 13px; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);'>(Click to copy!)</div>
-                    </div>
-    
-                    <br>
-                    <span style='color: #fff !important;'>You can use this link to login...</span> <a href='localhost/teknofest/index.php' style='color: white;'>Login Now!</a>
-    
-                    
-                    <br><br>
-                    <br><br>
-                    <span style='color: #fff !important;'>Regards,</span> <br>
-                    <span style='color: #fff !important;'>Maarif School</span>
-                    <br><br>
-                    <center><span style='font-size: 12px; color: #fff !important;'>This is auto-generated email address please do not respond to this email address!</span></center>
-                    
-                    <p style='text-align:center; position: absolute; bottom: 0; left: 50%; font-size: 11px; color: #fff !important; transform: translateX(-50%); width: 100%;'> Maarif International Schools of Ethiopia &copy; 2024 | All rights reserved </p>
-                </div>
-                  </div>
-                  <div style='border-bottom: 1px solid rgba(255,255,255,.1); position: absolute; bottom: 20px; z-index: 100; width:100%; margin-left: -70px !important;'></div>
-                  <script>
-
-                  var copyText = document.getElementById('passcopy');
-
-                  function myFunction() {
-                     
-                        document.execCommand('copy');
-                  }
-                     
-                  </script>
-                  ";
-
-                  $mail-> send();
-
-                  echo "<script>window.top.location='admin-home.php?success'</script>";
-
-               } else {
-                  echo "<script>window.top.location='admin-home.php?Too_Large'</script>";
-               }
-            }
-            else
-            {
-               echo "<script>window.top.location='admin-home.php?Empty'</script>";
-            }
-
+      /* if (move_uploaded_file($tempname, $folder)) {
+         echo "<p class='echstyle'>Successfully uploaded file!</p>";
+      } else {
+         echo "<p class='echstyle'>File not uploaded!</p>";
+      }
+      */
+      if ($mysql_run) {
+         header("Location: admin-home.php");
+      } else {
+         header("Location: admin-home.php");
       }
    }
-
 ?>
